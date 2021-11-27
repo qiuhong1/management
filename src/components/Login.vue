@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <swiper-mine></swiper-mine>
+    <swiper-mine class="login-swiper"></swiper-mine>
     <div class="formbox">
       <p>隐私政策更新</p>
       <h2>邮箱账号登录</h2>
@@ -84,7 +84,7 @@
             if(!valid) return;
             else{
               getLogin(this.loginForm).then(res=>{
-                console.log(res);
+                // console.log(res);
                 if(res.meta.status!==200){
                   this.$Message.error('仔细看看,你登陆失败了，哈哈')
                 }else{
@@ -102,6 +102,9 @@
 <style lang="less" scoped>
     .login {
         height: 100vh;
+        .login-swiper{
+          height: calc(100% - 70px);
+        }
     }
     
     .login_header {

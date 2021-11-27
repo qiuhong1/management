@@ -20,11 +20,11 @@ export default {
     imglist:[
       {
         id:'1',
-        imgUrl:require('../assets/1.jpg')
+        imgUrl:require('../assets/2.jpg')
       },
       {
         id:'2',
-        imgUrl:require('../assets/2.jpg')
+        imgUrl:require('../assets/1.jpg')
       },{
         id:'3',
         imgUrl:require('../assets/3.jpg')
