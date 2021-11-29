@@ -58,14 +58,14 @@
         <template slot-scope="scope">
           <!-- {{scope.row}} -->
         <!-- <template> -->
-          <el-tooltip placement="top" content="分配角色" :enterable="false">
-            <el-button type="primary" icon="el-icon-edit" @click="editUsers(scope.row.id)"></el-button>
+          <el-tooltip placement="top" content="编辑角色" :enterable="false">
+            <el-button  size="mini" type="primary" icon="el-icon-edit" @click="editUsers(scope.row.id)"></el-button>
+          </el-tooltip>
+          <el-tooltip placement="top" content="删除角色" :enterable="false">
+            <el-button size="mini" type="danger" icon="el-icon-delete" @click="removeUserById(scope.row.id)"></el-button>
           </el-tooltip>
           <el-tooltip placement="top" content="分配角色" :enterable="false">
-            <el-button type="danger" icon="el-icon-delete" @click="removeUserById(scope.row.id)"></el-button>
-          </el-tooltip>
-          <el-tooltip placement="top" content="分配角色" :enterable="false">
-            <el-button type="warning" icon="el-icon-setting"></el-button>
+            <el-button type="warning" size="mini" icon="el-icon-setting" @click="setRole(scope.row)"></el-button>
           </el-tooltip>
        </template>
       </el-table-column>
@@ -114,7 +114,7 @@
       <el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="80px">
         <el-form-item label="用户名">
           <el-input v-model="editForm.username" :disabled="true"></el-input>
-          {{editForm}}
+          <!-- {{editForm}} -->
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="editForm.email"></el-input>
@@ -128,7 +128,31 @@
         <el-button type="primary" @click="editUserInfo">确 定</el-button>
       </span>
     </el-dialog>
-
+    <!-- 分配角色的对话框 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="setRoleDialogVisible"
+      width="50%"
+      @close="dialogClosed">
+      <div>
+        <p>当前的用户：{{userInfo.username}}</p>
+        <p>当前的角色：{{userInfo.role_name}}</p>
+        <p>分配新角色：
+          <el-select v-model="selectedRoleId" placeholder="请选择">
+          <el-option
+            v-for="item in rolesList"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveRole">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -207,7 +231,14 @@ export default {
       // 修改用户的对话框显示与隐藏属性
       editDialogVisible:false,
       // 查询到的用户信息
-      editForm:{}
+      editForm:{},
+      // 控制分配角色的对话框的显示与隐藏
+      setRoleDialogVisible:false,
+      userInfo:{},
+      //角色列表
+      rolesList:[],
+      // 选择的角色
+      selectedRoleId:''
     }
   },
   created(){
@@ -255,7 +286,6 @@ export default {
       this.$refs.addFormRef.resetFields()
     },
     addUser(){
-      // dialogVisible = false;
       this.$refs.addFormRef.validate((vaild)=>{
       //  console.log(vaild);   vaild为false或者true
       if(!vaild)return;
@@ -350,7 +380,37 @@ export default {
           console.log(err);
           this.$Message.info('已取消删除')
         })
-    }
+    },
+    // 分配角色的对话框
+   setRole(userInfo){
+     this.userInfo=userInfo
+    //  获取所有角色列表
+    this.$http.get('roles').then(res=>{
+      // console.log(res);
+      if(res.data.meta.status!==200)return this.$Message.error('获取角色列表失败')
+      this.rolesList=res.data.data
+    })
+     this.setRoleDialogVisible = true
+   },
+   saveRole(){
+     if(!this.selectedRoleId){
+       this.$Message.error('请选择要分配的角色')
+     }else{
+       this.$http.put('users/'+this.userInfo.id+'/role',{
+         rid:this.selectedRoleId
+       }).then(res=>{
+        //  console.log(res);
+      if(res.data.meta.status!==200)return this.$Message.error('更新角色失败')
+      this.$Message.success('更新角色成功')
+      this.getUserList()
+      this.setRoleDialogVisible = false
+       })
+     }
+   },
+   dialogClosed(){
+     this.selectedRoleId=''
+     this.userInfo={}
+   }
   }
 }
 </script>
