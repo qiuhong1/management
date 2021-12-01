@@ -21,6 +21,10 @@ axios.interceptors.request.use(config => {
 })
 Vue.prototype.$http = axios
 
+// 树形控件
+import TreeTable from 'vue-table-with-tree-grid'
+Vue.component('tree-table', TreeTable)
+
 Vue.config.productionTip = false
 import './assets/css/index.css'
 new Vue({

@@ -33,6 +33,10 @@ const routes = [{
             path: '/roles',
             component: () =>
                 import ('../views/homechild/Roles')
+        }, {
+            path: '/categories',
+            component: () =>
+                import ('../views/homechild/goods/Cate')
         }],
         component: () =>
             import ('../views/home/Home')
