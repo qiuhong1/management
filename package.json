@@ -9,7 +9,10 @@
   "dependencies": {
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "echarts": "^5.2.2",
     "element-ui": "^2.4.5",
+    "loadsh": "^0.0.4",
+    "lodash": "^4.17.21",
     "swiper": "^7.3.0",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^2.6.7",
