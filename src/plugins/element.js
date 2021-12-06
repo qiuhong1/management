@@ -39,6 +39,13 @@ import {
     Upload
 } from 'element-ui'
 
+
+import Timeline from './timeline/index'
+import TimelineItem from './timeline-item/index'
+Vue.use(Timeline)
+Vue.use(TimelineItem)
+
+
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
